@@ -1,6 +1,11 @@
+import Projects from './Projects';
+
 const Dashboard = () => {
     return ( 
-        <h1>Dashboard</h1>
+        <section>
+            <h1>Dashboard</h1>
+            <Projects />
+        </section>
      );
 }
  
