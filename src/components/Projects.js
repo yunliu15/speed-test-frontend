@@ -5,36 +5,58 @@ import Project from './Project';
 const Projects = () => {
     const [projects, setPorjects] = useState([]);
     const axiosPrivate = useAxiosPrivate();
-    const controller = new AbortController();
+    const [showCreate, setShowCreate] = useState(false);
+    const [newProject, setNewProject] = useState('');
+    const [message, setMessage] = useState({content:'', type:''});
+
     const deleteProject = async (id) => {
         try {
             const result = await axiosPrivate.delete(
                 '/projects', 
                 {
-                    data: JSON.stringify({ id }),
-                    signal: controller.signal
+                    data: JSON.stringify({ id })
                 }
                 );
-            const newProjects = projects.filter(p => p._id !== result.data._id)
-            setPorjects(newProjects);
+            if(result.data?._id) {
+                const newProjects = projects.filter(p => p._id !== result.data._id)
+                setPorjects(newProjects);
+                setMessage({content: `${result.data.projectName} deleted`, type: 'success'});
+                
+            } else {
+                setMessage({content: 'Project not found', type: 'error'})
+            }
         } catch(err) {
             console.error(err);
+            setMessage({content: err.message, type: 'error'})
         }
     }
 
-    const createProject = async (name) => {
+    const createProject = async (e) => {
+        e.preventDefault();
         try {
             const result = await axiosPrivate.post(
                 '/projects', 
-                {
-                    data: JSON.stringify({ projectName: name }),
-                    signal: controller.signal
-                }
+                JSON.stringify({ projectName: newProject })
                 );
-            const newProjects = projects.filter(p => p._id !== result.data._id)
-            setPorjects(newProjects);
+                if (result.data?._id) {
+                    const newProjects = [...projects, result.data];
+                    setPorjects(newProjects);
+                    setShowCreate(false);
+                    setMessage({content: `${result.data.projectName} created`, type: 'success'});
+                    setNewProject('');
+                } else {
+                    console.log(result)
+                }
+
+            
         } catch(err) {
             console.error(err);
+            if (err.response?.data?.message){
+                setMessage({content: err.response.data.message, type: 'error'})
+            } else {
+                setMessage({content: err.message, type: 'error'})
+            }
+            
         }
     } 
 
@@ -52,15 +74,33 @@ const Projects = () => {
         
         return () => {
             ignore = true;
-            controller.abort();
         }
 
     }, [])
-    return ( 
+    return (
+        <div>
+            <p className={message.type}>{message.content}</p>
+            <button onClick={() => setShowCreate(true)}>Create a Project</button>
+
+        {
+            showCreate && (
+                <form onSubmit={createProject}>                
+                    <label htmlFor='create_project'>Create a Project</label>
+                    <input
+                    id='create_project'
+                    value={newProject}
+                    onChange={(e) => setNewProject(e.target.value)}
+                    />                
+                    <button type='submit'>Submit</button>
+                    <burron onClick={()=> {setNewProject(''); setShowCreate(false)} }>Cancel</burron>
+                </form>
+            )
+        }
         <ul>
         {
             projects.map(p => {
                 return (
+                    
                     <li key={p.projectName}>
                         <Project 
                         project={p}
@@ -71,6 +111,7 @@ const Projects = () => {
             })
         }
         </ul>
+        </div>
      );
 }
  
