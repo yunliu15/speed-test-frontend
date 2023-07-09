@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import Project from './Project';
+import { Link } from 'react-router-dom';
 
 const Projects = () => {
     const [projects, setPorjects] = useState([]);
@@ -79,7 +79,7 @@ const Projects = () => {
     }, [])
     return (
         <div>
-            <p className={message.type}>{message.content}</p>
+            <p className={`message ${message.type}`}>{message.content}</p>
             <button onClick={() => setShowCreate(true)}>Create a Project</button>
 
         {
@@ -92,7 +92,7 @@ const Projects = () => {
                     onChange={(e) => setNewProject(e.target.value)}
                     />                
                     <button type='submit'>Submit</button>
-                    <burron onClick={()=> {setNewProject(''); setShowCreate(false)} }>Cancel</burron>
+                    <button onClick={()=> {setNewProject(''); setShowCreate(false)} }>Cancel</button>
                 </form>
             )
         }
@@ -101,11 +101,9 @@ const Projects = () => {
             projects.map(p => {
                 return (
                     
-                    <li key={p.projectName}>
-                        <Project 
-                        project={p}
-                        handleDelete={deleteProject}
-                        />
+                    <li key={p._id}>
+                        <Link to={`projects/${p._id}`}><h2>{p.projectName}</h2></Link>
+                        <button onClick={() => deleteProject(p._id)}>Remove</button>                        
                     </li>
                 )
             })

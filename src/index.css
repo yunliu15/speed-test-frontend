@@ -130,3 +130,16 @@ button {
     width: 20px;
     margin: 0 5px 2px 2px;
 }
+
+.message {
+    padding: 10px;
+    text-align: center;
+}
+.message.success {
+    background: #D0F0AB;
+    color: #068806;
+}
+.message.error {
+    background: #F0ABBF;
+    color: #E70A4A;
+}
