@@ -1,9 +1,10 @@
 import {useState, useEffect} from 'react';
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Projects = () => {
     const [projects, setPorjects] = useState([]);
+    const navigate = useNavigate();
     const axiosPrivate = useAxiosPrivate();
     const [showCreate, setShowCreate] = useState(false);
     const [newProject, setNewProject] = useState('');
@@ -102,7 +103,14 @@ const Projects = () => {
                 return (
                     
                     <li key={p._id}>
-                        <Link to={`projects/${p._id}`}><h2>{p.projectName}</h2></Link>
+                        <h2 
+                        onClick={() => {
+                            navigate(`projects/${p._id}`, 
+                            {state: {currentProject: p}})
+                        }}
+                        >
+                            {p.projectName}
+                        </h2>
                         <button onClick={() => deleteProject(p._id)}>Remove</button>                        
                     </li>
                 )

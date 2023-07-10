@@ -1,18 +1,18 @@
-import { useParams } from "react-router-dom";
-import useProject from "../hooks/useProject";
+import { useParams, useLocation, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { Link } from 'react-router-dom';
 
 const Project = () => {
     const params = useParams();
     const projectId = params.id;
-    const {currentProject, setCurrentProject} = useProject();
+    const {state} = useLocation();
+    const navigate = useNavigate();
+    const [currentProject, setCurrentProject] = useState(state?.currentProject)
     const axiosPrivate = useAxiosPrivate();
     const [message, setMessage] = useState({content:'', type:''});
     const [showCreate, setShowCreate] = useState(false);
     const [newDomain, setNewDomain] = useState('');
-
+    console.log(state)
     const createDomain = async (e) => {
         e.preventDefault();
         try {
@@ -66,13 +66,12 @@ const Project = () => {
         }
     }
     
-    
     useEffect( () => {
         let ignore = false;
         const getProject = async () => {
-
+            console.log('get project call')
             try {
-                const result = await axiosPrivate.get(`projects/${projectId}`);console.log(result)
+                const result = await axiosPrivate.get(`projects/${projectId}`);
                 if (result.data) {
                     !ignore  && setCurrentProject(result.data)
                 } else {
@@ -84,7 +83,9 @@ const Project = () => {
                 
             }
         }
-        getProject();
+        if (!currentProject) {
+            getProject();
+        }
 
         return () => {
             ignore = true;
@@ -110,12 +111,21 @@ const Project = () => {
                     </form>
                 )
             }
-            <h2>{currentProject.projectName}</h2>
+            <h2>{currentProject?.projectName}</h2>
             <ul>
             {
-                currentProject.domains?.map(d => {
+                currentProject?.domains?.map(d => {
                     return (<li key={d._id}>
-                        <h3>{d.domainName}</h3>
+                        <Link to={`/projects/${projectId}/domains/${d._id}`}>
+                            <h3
+                            onClick={() => {
+                                navigate(`/projects/${projectId}/domains/${d._id}`, 
+                                {state: {currentDomain: d}})
+                            }}
+                            >
+                                {d.domainName}
+                            </h3>
+                        </Link>
                         <button onClick={() => deleteDomain(d._id, d.domainName)}>Remove</button> 
                         </li>)
                 })
