@@ -91,7 +91,7 @@ const Project = () => {
         return () => {
             ignore = true;
         }
-    }, [])
+    }, [axiosPrivate, projectId, currentProject, setMessage])
 
     return ( 
         <section>

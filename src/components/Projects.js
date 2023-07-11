@@ -78,7 +78,7 @@ const Projects = () => {
             ignore = true;
         }
 
-    }, [])
+    }, [axiosPrivate])
     return (
         <div>
             
