@@ -13,7 +13,7 @@ const Project = () => {
     const {setMessage} = useMessage();
     const [showCreate, setShowCreate] = useState(false);
     const [newDomain, setNewDomain] = useState('');
-    console.log(state)
+
     const createDomain = async (e) => {
         e.preventDefault();
         try {
@@ -107,7 +107,7 @@ const Project = () => {
                         onChange={(e) => setNewDomain(e.target.value)}
                         />                
                         <button type='submit'>Submit</button>
-                        <button onClick={()=> {setNewDomain(''); setShowCreate(false)} }>Cancel</button>
+                        <button onClick={()=> {setNewDomain(''); setShowCreate(false);setMessage({})} }>Cancel</button>
                     </form>
                 )
             }

@@ -1,7 +1,10 @@
 import { useParams, useLocation, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useMessage from '../hooks/useMessage';
+import TestLog from "./TestLog";
+
+
 const Domain = () => {
     const {setMessage} = useMessage();
     const params = useParams();
@@ -11,9 +14,10 @@ const Domain = () => {
     const [currentDomain, setCurrentDomain] = useState(state?.currentDomain);
     const axiosPrivate = useAxiosPrivate();
     const [testResults, setTestResults] = useState([]);
+    const [testing, setTesting] = useState(false);
 
 
-    const fetchResult = async () => {
+    const fetchResult = useCallback(async () => {
         try {
             const result = await axiosPrivate.get(`/speedTest/${projectId}/${domainId}`);
             if (result.data) {
@@ -24,9 +28,11 @@ const Domain = () => {
         } catch(err) {
             console.error(err);
         }
-    }
+    }, [domainId, projectId, axiosPrivate])
 
     const testSpeed = async () => {
+        setMessage({});
+        setTesting(true)
         try {
             const result = await axiosPrivate.post(
                 '/speedTest', 
@@ -34,9 +40,11 @@ const Domain = () => {
             );
             console.log(result);
             fetchResult();
+            setTesting(false)
         } catch(err) {
             console.error(err)
-            setMessage({content: err.message, type: 'error'})
+            setMessage({content: 'Something went wrong, please try again later', type: 'error'});
+            setTesting(false)
         }
     }
 
@@ -70,30 +78,59 @@ const Domain = () => {
     }, [currentDomain, domainId, projectId, setMessage, axiosPrivate])
 
     useEffect(() => {
-        if (projectId && domainId) {
-            fetchResult();
-        }
+        fetchResult();
 
-    }, [domainId, projectId])
+    }, [fetchResult])
     
     return ( 
         <section>
             <Link to={`/projects/${projectId}`} > Back to Project </Link>
-            {currentDomain?.domainName}
-            {!!currentDomain?.domainName && <button onClick={testSpeed} >Test Speed</button>}
-            <ul>
-                {
-                    testResults.map(t => {
-                        return (
-                            <li key={t._id} >
-                                <div>{t.logTimestamp}</div>
-                                <div>Mobile: {t.mobilePerformanceScore} </div>
-                                <div>Desktop: {t.desktopPerformanceScore}</div>
-                            </li>
-                        )
-                    })
-                }
-            </ul>
+            <h1>{currentDomain?.domainName}</h1>
+            {!!currentDomain?.domainName && <button onClick={testSpeed} >{testing? 'Testing...': 'Test Speed'}</button>}
+            <h2 className="log-table-header">Test Result Log</h2>
+            <table className="table log-table">
+                <thead>
+                <tr>
+                    <th className="text-left">
+                    Date
+                    </th>
+                    <th className="text-left">
+                    Performance Score
+                    </th>
+                    <th className="text-left">
+                    Cumulative Layout Shift
+                    </th>
+                    <th className="text-left">
+                    Largest Contentful Paint
+                    </th>
+                    <th className="text-left">
+                    First Contentful Paint
+                    </th>
+                    <th className="text-left">
+                    Total Blocking Time
+                    </th>
+                    <th className="text-left">
+                    Time to Interactive
+                    </th>
+                    <th className="text-left">
+                    Speed Index
+                    </th>
+                    <th className="text-left">
+                    Loading Experience
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {testResults.length? testResults.map(item => {
+                    return (
+                        <TestLog
+                            key={item._id}
+                            result={item}
+                        />
+                    )
+                }) : <tr></tr>}
+                </tbody>
+            </table>
         </section>
      );
 }

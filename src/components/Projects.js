@@ -94,7 +94,7 @@ const Projects = () => {
                     onChange={(e) => setNewProject(e.target.value)}
                     />                
                     <button type='submit'>Submit</button>
-                    <button onClick={()=> {setNewProject(''); setShowCreate(false)} }>Cancel</button>
+                    <button onClick={()=> {setNewProject(''); setShowCreate(false); setMessage({})} }>Cancel</button>
                 </form>
             )
         }
