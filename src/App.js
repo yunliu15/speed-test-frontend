@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
+import MessageLayout from './components/MessageLayout';
 import { AuthProvider } from './context/AuthProvider';
 import PersistLogin from './components/PersistLogin';
 import RequireAuth from './components/RequireAuth';
@@ -20,10 +21,12 @@ function App() {
 
             <Route element={<PersistLogin />}>
               <Route element={<RequireAuth/>}>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/projects" element={<Dashboard />} />
-                <Route path="/projects/:id" element={<ProjectPage />} />
-                <Route path="/projects/:id/domains/:domainid" element={<DomainPage />} />
+                <Route element={<MessageLayout/>} >
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/projects" element={<Dashboard />} />
+                  <Route path="/projects/:id" element={<ProjectPage />} />
+                  <Route path="/projects/:id/domains/:domainid" element={<DomainPage />} />
+                </Route>
               </Route>
             </Route>
           </Route>

@@ -1,7 +1,6 @@
 import { useParams, useLocation, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-
 const Domain = () => {
 
     const params = useParams();

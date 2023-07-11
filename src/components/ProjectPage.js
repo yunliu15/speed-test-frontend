@@ -1,6 +1,7 @@
 import { useParams, useLocation, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useMessage from '../hooks/useMessage';
 
 const Project = () => {
     const params = useParams();
@@ -9,7 +10,7 @@ const Project = () => {
     const navigate = useNavigate();
     const [currentProject, setCurrentProject] = useState(state?.currentProject)
     const axiosPrivate = useAxiosPrivate();
-    const [message, setMessage] = useState({content:'', type:''});
+    const {setMessage} = useMessage();
     const [showCreate, setShowCreate] = useState(false);
     const [newDomain, setNewDomain] = useState('');
     console.log(state)
@@ -95,7 +96,6 @@ const Project = () => {
     return ( 
         <section>
             <Link to='/'>Back to Dashboard</Link>
-            <p className={`message ${message.type}`}>{message.content}</p>
             <button onClick={() => setShowCreate(true)}>Add a domain</button>
             {
                 showCreate && (

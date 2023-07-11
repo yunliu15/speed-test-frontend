@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { useNavigate } from 'react-router-dom';
+import useMessage from '../hooks/useMessage';
 
 const Projects = () => {
     const [projects, setPorjects] = useState([]);
@@ -8,7 +9,7 @@ const Projects = () => {
     const axiosPrivate = useAxiosPrivate();
     const [showCreate, setShowCreate] = useState(false);
     const [newProject, setNewProject] = useState('');
-    const [message, setMessage] = useState({content:'', type:''});
+    const {setMessage} = useMessage();
 
     const deleteProject = async (id) => {
         try {
@@ -80,7 +81,7 @@ const Projects = () => {
     }, [])
     return (
         <div>
-            <p className={`message ${message.type}`}>{message.content}</p>
+            
             <button onClick={() => setShowCreate(true)}>Create a Project</button>
 
         {
