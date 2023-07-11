@@ -106,6 +106,7 @@ const Projects = () => {
                     <li key={p._id}>
                         <h2 
                         onClick={() => {
+                            setMessage({});
                             navigate(`projects/${p._id}`, 
                             {state: {currentProject: p}})
                         }}

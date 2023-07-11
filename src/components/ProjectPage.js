@@ -119,6 +119,7 @@ const Project = () => {
                         <Link to={`/projects/${projectId}/domains/${d._id}`}>
                             <h3
                             onClick={() => {
+                                setMessage({});
                                 navigate(`/projects/${projectId}/domains/${d._id}`, 
                                 {state: {currentDomain: d}})
                             }}
