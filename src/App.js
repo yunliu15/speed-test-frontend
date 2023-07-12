@@ -8,7 +8,8 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import ProjectPage from './components/ProjectPage';
-import DomainPage from './components/DomainPage'
+import DomainPage from './components/DomainPage';
+import NotFound from './components/NotFound';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<Layout />}>
+            <Route path="*" element={<NotFound/>}/>
             <Route path="register" element={<Register />} />
             <Route path="login" element={<Login />} />
 
