@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react';
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { useNavigate } from 'react-router-dom';
 import useMessage from '../hooks/useMessage';
+import useModal from '../hooks/useModal';
 
 const Projects = () => {
     const [projects, setPorjects] = useState([]);
@@ -10,6 +11,7 @@ const Projects = () => {
     const [showCreate, setShowCreate] = useState(false);
     const [newProject, setNewProject] = useState('');
     const {setMessage} = useMessage();
+    const {setShowModal, setModalContent, setModalCallback} = useModal();
 
     const deleteProject = async (id) => {
         try {
@@ -81,7 +83,6 @@ const Projects = () => {
     }, [axiosPrivate])
     return (
         <div>
-            
             <button onClick={() => setShowCreate(true)}>Create a Project</button>
 
         {
@@ -113,7 +114,16 @@ const Projects = () => {
                         >
                             {p.projectName}
                         </h2>
-                        <button onClick={() => deleteProject(p._id)}>Remove</button>                        
+                        <button onClick={() => {
+                            setShowModal(true);
+                            setModalContent(
+                                <p>{`Are you sure you want to remove ${p.projectName}?`}</p>
+                            );
+                            console.log('clicked')
+                            setModalCallback(() => {
+                                return () => deleteProject(p._id);
+                            })
+                        }}>Remove</button>                        
                     </li>
                 )
             })

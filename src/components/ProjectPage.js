@@ -2,6 +2,7 @@ import { useParams, useLocation, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useMessage from '../hooks/useMessage';
+import useModal from '../hooks/useModal';
 
 const Project = () => {
     const params = useParams();
@@ -13,6 +14,7 @@ const Project = () => {
     const {setMessage} = useMessage();
     const [showCreate, setShowCreate] = useState(false);
     const [newDomain, setNewDomain] = useState('');
+    const {setShowModal, setModalContent, setModalCallback} = useModal();
 
     const createDomain = async (e) => {
         e.preventDefault();
@@ -95,7 +97,7 @@ const Project = () => {
 
     return ( 
         <section>
-            <Link to='/'>Back to Dashboard</Link>
+            <Link to='/' onClick={() => setMessage({})}>Back to Dashboard</Link>
             <button onClick={() => setShowCreate(true)}>Add a domain</button>
             {
                 showCreate && (
@@ -127,7 +129,18 @@ const Project = () => {
                                 {d.domainName}
                             </h3>
                         </Link>
-                        <button onClick={() => deleteDomain(d._id, d.domainName)}>Remove</button> 
+                        <button
+                            onClick={() => {
+                                setShowModal(true);
+                                setModalContent(
+                                    <p>{`Are you sure you want to remove ${d.domainName}?`}</p>
+                                );
+                                console.log('clicked')
+                                setModalCallback(() => {
+                                    return () => deleteDomain(d._id, d.domainName);
+                                })
+                            }}
+                        >Remove</button> 
                         </li>)
                 })
             }

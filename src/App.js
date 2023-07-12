@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import MessageLayout from './components/MessageLayout';
 import { AuthProvider } from './context/AuthProvider';
+import { ModalProvider } from './context/ModalProvider';
 import PersistLogin from './components/PersistLogin';
 import RequireAuth from './components/RequireAuth';
 import Register from './components/Register';
@@ -15,6 +16,7 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+      <ModalProvider>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="*" element={<NotFound/>}/>
@@ -33,7 +35,8 @@ function App() {
             </Route>
           </Route>
         </Routes>
-      </AuthProvider>      
+        </ModalProvider>
+      </AuthProvider>     
     </BrowserRouter>  
   );
 }
