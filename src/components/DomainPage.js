@@ -5,7 +5,49 @@ import useMessage from '../hooks/useMessage';
 import TestLog from "./TestLog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import ResultChart from "./ResultChart";
 
+const getChartData = (testResults, attribute) => {
+    let mobileData = [];
+    let desktopData = [];
+    testResults.forEach(item => {
+        const theDate = (new Date(item.logTimestamp)).toLocaleDateString();
+        switch(attribute) {
+            case 'Performance':
+                item.mobilePerformanceScore && mobileData.unshift([theDate, Number((item.mobilePerformanceScore * 100).toFixed(0))]);
+                item.desktopPerformanceScore && desktopData.unshift([theDate, Number((item.desktopPerformanceScore * 100).toFixed(0))]);
+                break;
+            case 'CLS':
+                item.mobileClsScore.value !=='' && mobileData.unshift([theDate, Number(item.mobileClsScore.value)])
+                item.desktopClsScore.value !=='' && desktopData.unshift([theDate,  Number(item.desktopClsScore.value)]);
+                break;
+            case 'LCP':
+                item.mobileLcpScore.value !=='' && mobileData.unshift([theDate, Number(item.mobileLcpScore.value.replace("s", ""))])
+                item.desktopLcpScore.value !=='' && desktopData.unshift([theDate,  Number(item.desktopLcpScore.value.replace("s", ""))]);
+                break;
+            case 'FCP':
+                item.mobileFcpScore.value !=='' && mobileData.unshift([theDate, Number(item.mobileFcpScore.value.replace("s", ""))])
+                item.desktopFcpScore.value !=='' && desktopData.unshift([theDate,  Number(item.desktopFcpScore.value.replace("s", ""))]);
+                break;
+            case 'TBT':
+                item.mobileTbtScore.value !=='' && mobileData.unshift([theDate, Number(item.mobileTbtScore.value.replace("ms", "").replace(",", ""))])
+                item.desktopTbtScore.value !=='' && desktopData.unshift([theDate,  Number(item.desktopTbtScore.value.replace("ms", "").replace(",", ""))]);
+                break;
+            case 'TTI':console.log(item.desktopTtiScore.value)
+                item.mobileTtiScore.value !=='' && mobileData.unshift([theDate, Number(item.mobileTtiScore.value.replace("s", ""))])
+                item.desktopTtiScore.value !=='' && desktopData.unshift([theDate,  Number(item.desktopTtiScore.value.replace("s", ""))]);
+                break;
+            case 'Speed Index':console.log(item.desktopSpeedIndex)
+                item.mobileSpeedIndex.value !=='' && mobileData.unshift([theDate, Number(item.mobileSpeedIndex.value.replace("s", ""))])
+                item.desktopSpeedIndex.value !=='' && desktopData.unshift([theDate,  Number(item.desktopSpeedIndex.value.replace("s", ""))]);
+                break;
+        }
+       
+    });
+    mobileData.unshift(['Date', attribute]);
+    desktopData.unshift(['Date', attribute]);
+    return [mobileData, desktopData];
+}
 
 const Domain = () => {
     const {setMessage} = useMessage();
@@ -17,8 +59,10 @@ const Domain = () => {
     const axiosPrivate = useAxiosPrivate();
     const [testResults, setTestResults] = useState([]);
     const [testing, setTesting] = useState(false);
-
-
+    const [dataView, setDataView] = useState('mobile');
+    const [chartAttribute, setAttribute] = useState('Performance');
+    const [mobileData, desktopData] = getChartData(testResults, chartAttribute);
+    
     const fetchResult = useCallback(async () => {
         try {
             const result = await axiosPrivate.get(`/speedTest/${projectId}/${domainId}`);
@@ -88,9 +132,27 @@ const Domain = () => {
         <section>
             <Link to={`/projects/${projectId}`} > Back to Project </Link>
             <div className='container-header'>
-                <h2>{currentDomain?.domainName}</h2>
+                <h1>{currentDomain?.domainName}</h1>
                 {!!currentDomain?.domainName && <button className={testing? 'secondary testing': 'secondary'} onClick={testSpeed} >{testing? <FontAwesomeIcon icon={faSpinner} />: 'Run Test'}</button>}
             </div>
+            <div className="chart-select-forms">
+                <select className="form-control form-control-sm mb-2" value={dataView} onChange={(e)=>setDataView(e.target.value)}>
+                    <option value="mobile">Mobile</option>
+                    <option value="desktop">Desktop</option>
+                </select>
+                <select className="form-control form-control-sm mb-2" value={chartAttribute} onChange={(e)=>setAttribute(e.target.value)}>
+                    <option value="Performance">Performance</option>
+                    <option value="CLS">CLS</option>
+                    <option value="LCP">LCP</option>
+                    <option value="FCP">FCP</option>
+                    <option value="TBT">TBT</option>
+                    <option value="TTI">TTI</option>
+                    <option value="Speed Index">Speed Index</option>
+                </select>
+            </div>
+            {(mobileData && mobileData.length > 1) && (desktopData && desktopData.length > 1) ? 
+                <ResultChart data={dataView === 'mobile' ? mobileData : desktopData}/>
+            : <p className='no-test-notice'>Please run some test to view the performance statistics for the domain!</p>}
             <h2 className="log-table-header">Recent Results</h2>
             <table className="table log-table">
                 <thead>

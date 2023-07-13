@@ -71,6 +71,11 @@ textarea {
   border-radius: 0.5rem;
   max-width: 500px;
 }
+select {
+    padding:8px 10px;
+    margin-right: 10px;
+    margin-bottom: 20px
+}
 label {
     margin-bottom: 0.5rem;
 }
