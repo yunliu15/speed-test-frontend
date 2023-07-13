@@ -3,6 +3,8 @@ import { useEffect, useState, useCallback } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useMessage from '../hooks/useMessage';
 import TestLog from "./TestLog";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 
 const Domain = () => {
@@ -85,9 +87,11 @@ const Domain = () => {
     return ( 
         <section>
             <Link to={`/projects/${projectId}`} > Back to Project </Link>
-            <h1>{currentDomain?.domainName}</h1>
-            {!!currentDomain?.domainName && <button onClick={testSpeed} >{testing? 'Testing...': 'Test Speed'}</button>}
-            <h2 className="log-table-header">Test Result Log</h2>
+            <div className='container-header'>
+                <h2>{currentDomain?.domainName}</h2>
+                {!!currentDomain?.domainName && <button className={testing? 'secondary testing': 'secondary'} onClick={testSpeed} >{testing? <FontAwesomeIcon icon={faSpinner} />: 'Run Test'}</button>}
+            </div>
+            <h2 className="log-table-header">Recent Results</h2>
             <table className="table log-table">
                 <thead>
                 <tr>

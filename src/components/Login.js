@@ -91,7 +91,9 @@ const Login = () => {
                     value={pwd}
                     required
                 />
-                <button>Sign In</button>
+                <div class="actions">
+                <button className='primary'>Sign In</button>
+                </div>
 
                 <div className="persistCheck">
                     <input

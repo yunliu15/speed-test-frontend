@@ -3,6 +3,8 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { useNavigate } from 'react-router-dom';
 import useMessage from '../hooks/useMessage';
 import useModal from '../hooks/useModal';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 const Projects = () => {
     const [projects, setPorjects] = useState([]);
@@ -82,54 +84,68 @@ const Projects = () => {
 
     }, [axiosPrivate])
     return (
-        <div>
-            <button onClick={() => setShowCreate(true)}>Create a Project</button>
+        <>
+            <div className='container-header'>
+                <h2>Projects</h2>
+                <button className='primary' onClick={() => setShowCreate(true)}>Create a Project</button>
+            
 
-        {
-            showCreate && (
-                <form onSubmit={createProject}>                
-                    <label htmlFor='create_project'>Create a Project</label>
-                    <input
-                    id='create_project'
-                    value={newProject}
-                    onChange={(e) => setNewProject(e.target.value)}
-                    />                
-                    <button type='submit'>Submit</button>
-                    <button onClick={()=> {setNewProject(''); setShowCreate(false); setMessage({})} }>Cancel</button>
-                </form>
-            )
-        }
-        <ul>
-        {
-            projects.map(p => {
-                return (
-                    
-                    <li key={p._id}>
-                        <h2 
-                        onClick={() => {
-                            setMessage({});
-                            navigate(`projects/${p._id}`, 
-                            {state: {currentProject: p}})
-                        }}
-                        >
-                            {p.projectName}
-                        </h2>
-                        <button onClick={() => {
-                            setShowModal(true);
-                            setModalContent(
-                                <p>{`Are you sure you want to remove ${p.projectName}?`}</p>
-                            );
-                            console.log('clicked')
-                            setModalCallback(() => {
-                                return () => deleteProject(p._id);
-                            })
-                        }}>Remove</button>                        
-                    </li>
-                )
-            })
-        }
-        </ul>
-        </div>
+                {
+                    showCreate && (
+                        <form className='dropdown' onSubmit={createProject}>                
+                            <label htmlFor='create_project'>Create a Project</label>
+                            <input
+                            type="text"
+                            id='create_project'
+                            value={newProject}
+                            onChange={(e) => setNewProject(e.target.value)}
+                            />
+                            <div className='actions'>
+                                            
+                                <button className='primary' type='submit'>Submit</button>
+                                <button className='secondary' onClick={()=> {setNewProject(''); setShowCreate(false); setMessage({})} }>Cancel</button>
+                            </div>
+                        </form>
+                    )
+                }
+            </div>
+            <ul className='item-cards'>
+            {
+                projects.map(p => {
+                    return (
+                        
+                        <li key={p._id} className='item-card'>
+                            <h3 
+                            onClick={() => {
+                                setMessage({});
+                                navigate(`projects/${p._id}`, 
+                                {state: {currentProject: p}})
+                            }}
+                            className='as-link'
+                            >
+                                {p.projectName}
+                            </h3>
+                            <button className='remove' onClick={() => {
+                                setShowModal(true);
+                                setModalContent(
+                                    <p>{`Are you sure you want to remove ${p.projectName}?`}</p>
+                                );
+                                setModalCallback(() => {
+                                    return () => deleteProject(p._id);
+                                })
+                            }}>
+                                <span className='sr-only'>Remove</span>
+                                <FontAwesomeIcon icon={faTrashCan} />
+                            </button>
+                            <hr />
+                            <h4>DOMAINS</h4>
+                            <div><span className='count'>{p.domains.length}</span></div>                      
+                        </li>
+                    )
+                })
+            }
+            </ul>
+        </>
      );
 }
  

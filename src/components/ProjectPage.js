@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useMessage from '../hooks/useMessage';
 import useModal from '../hooks/useModal';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 const Project = () => {
     const params = useParams();
@@ -98,38 +100,44 @@ const Project = () => {
     return ( 
         <section>
             <Link to='/' onClick={() => setMessage({})}>Back to Dashboard</Link>
-            <button onClick={() => setShowCreate(true)}>Add a domain</button>
-            {
-                showCreate && (
-                    <form onSubmit={createDomain}>                
-                        <label htmlFor='create_Domain'>Create a Domain</label>
-                        <input
-                        id='create_Domain'
-                        value={newDomain}
-                        onChange={(e) => setNewDomain(e.target.value)}
-                        />                
-                        <button type='submit'>Submit</button>
-                        <button onClick={()=> {setNewDomain(''); setShowCreate(false);setMessage({})} }>Cancel</button>
-                    </form>
-                )
-            }
-            <h2>{currentProject?.projectName}</h2>
-            <ul>
+            <div className='container-header'>
+
+                <h2>{currentProject?.projectName}</h2>
+                <button onClick={() => setShowCreate(true)}>Add a domain</button>
+                {
+                    showCreate && (
+                        <form onSubmit={createDomain} className="dropdown">                
+                            <label htmlFor='create_Domain'>Create a Domain</label>
+                            <input
+                            type="text"
+                            id='create_Domain'
+                            value={newDomain}
+                            onChange={(e) => setNewDomain(e.target.value)}
+                            />                
+                            <div className="actions">
+                                <button className="primary" type='submit'>Submit</button>
+                                <button className="secondary" onClick={()=> {setNewDomain(''); setShowCreate(false);setMessage({})} }>Cancel</button>
+                            </div>
+                        </form>
+                    )
+                }
+            </div>
+            <ul className="item-cards">
             {
                 currentProject?.domains?.map(d => {
-                    return (<li key={d._id}>
-                        <Link to={`/projects/${projectId}/domains/${d._id}`}>
-                            <h3
-                            onClick={() => {
-                                setMessage({});
-                                navigate(`/projects/${projectId}/domains/${d._id}`, 
-                                {state: {currentDomain: d}})
-                            }}
-                            >
-                                {d.domainName}
-                            </h3>
-                        </Link>
+                    return (<li key={d._id} className="item-card">
+                        <h3
+                        onClick={() => {
+                            setMessage({});
+                            navigate(`/projects/${projectId}/domains/${d._id}`, 
+                            {state: {currentDomain: d}})
+                        }}
+                        className="as-link"
+                        >
+                            {d.domainName}
+                        </h3>
                         <button
+                            className="remove"
                             onClick={() => {
                                 setShowModal(true);
                                 setModalContent(
@@ -140,7 +148,8 @@ const Project = () => {
                                     return () => deleteDomain(d._id, d.domainName);
                                 })
                             }}
-                        >Remove</button> 
+                        ><span className='sr-only'>Remove</span>
+                        <FontAwesomeIcon icon={faTrashCan} /></button> 
                         </li>)
                 })
             }

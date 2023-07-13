@@ -3,9 +3,6 @@ import useModal from "../hooks/useModal";
 
 const Modal = () => {
     const {showModal, setShowModal, modalContent, modalCallback} = useModal();
-    console.log( showModal)
-    console.log(modalContent);
-    console.log(modalCallback)
     return ( 
         <>
         {

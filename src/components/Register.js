@@ -178,8 +178,9 @@ const Register = () => {
                             <FontAwesomeIcon icon={faInfoCircle} />
                             Must match the first password input field.
                         </p>
-
-                        <button disabled={!user.validName || !pwd.validPwd || !matchPwd.validMatch ? true : false}>Sign Up</button>
+                        <div class="actions">
+                            <button className='primary' disabled={!user.validName || !pwd.validPwd || !matchPwd.validMatch ? true : false}>Sign Up</button>
+                        </div>                       
                     </form>
                     <p>
                         Already registered?<br />

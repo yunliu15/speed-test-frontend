@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDesktop, faMobileScreen } from "@fortawesome/free-solid-svg-icons";
+
 const TestLog = ({result}) => {
     const mobileCLS=result.mobileClsScore,
         mobileFCP=result.mobileFcpScore,
@@ -29,10 +32,10 @@ const TestLog = ({result}) => {
             </td>
             <td className="text-left nowrap">
                 <div className={`result-container ${mobilePerformanceScore && mobilePerformanceScore >= 0.8 ? 'good-score' : (mobilePerformanceScore >= 0.6 && mobilePerformanceScore <= 0.79 ? 'medium-score' : 'low-score')}`}>
-                    <i className="os-icon os-icon-tablet"></i> {mobilePerformanceScore ? ((mobilePerformanceScore * 100).toFixed(0) + ' / 100') : 'N/A'}
+                <FontAwesomeIcon icon={faMobileScreen} /> {mobilePerformanceScore ? ((mobilePerformanceScore * 100).toFixed(0) + ' / 100') : 'N/A'}
                 </div>
                 <div className={`result-container ${desktopPerformanceScore && desktopPerformanceScore >= 0.8 ? 'good-score' : (desktopPerformanceScore >= 0.6 && desktopPerformanceScore <= 0.79 ? 'medium-score' : 'low-score')}`}>
-                    <i className="os-icon os-icon-monitor"></i> {desktopPerformanceScore ? ((desktopPerformanceScore * 100).toFixed(0) + ' / 100') : 'N/A'}
+                <FontAwesomeIcon icon={faDesktop} />{desktopPerformanceScore ? ((desktopPerformanceScore * 100).toFixed(0) + ' / 100') : 'N/A'}
                 </div>
             </td>
             <td className="text-left nowrap">
