@@ -141,7 +141,7 @@ const Project = () => {
                             onClick={() => {
                                 setShowModal(true);
                                 setModalContent(
-                                    <p>{`Are you sure you want to remove ${d.domainName}?`}</p>
+                                    <p>{`Are you sure you want to remove ${d.domainName}? All test results in this domain will be deleted.`}</p>
                                 );
                                 console.log('clicked')
                                 setModalCallback(() => {

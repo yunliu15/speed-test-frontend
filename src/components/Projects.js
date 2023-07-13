@@ -128,7 +128,7 @@ const Projects = () => {
                             <button className='remove' onClick={() => {
                                 setShowModal(true);
                                 setModalContent(
-                                    <p>{`Are you sure you want to remove ${p.projectName}?`}</p>
+                                    <p>{`Are you sure you want to remove ${p.projectName}? All test results in this project will be deleted.`}</p>
                                 );
                                 setModalCallback(() => {
                                     return () => deleteProject(p._id);
