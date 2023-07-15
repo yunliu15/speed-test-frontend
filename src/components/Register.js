@@ -68,7 +68,7 @@ const Register = () => {
             return;
         }
         try {
-            const response = await axios.post(REGISTER_URL,
+            await axios.post(REGISTER_URL,
                 JSON.stringify({ user:user.value, pwd:pwd.value }),
                 {
                     headers: { 'Content-Type': 'application/json' },
@@ -178,7 +178,7 @@ const Register = () => {
                             <FontAwesomeIcon icon={faInfoCircle} />
                             Must match the first password input field.
                         </p>
-                        <div class="actions">
+                        <div className="actions">
                             <button className='primary' disabled={!user.validName || !pwd.validPwd || !matchPwd.validMatch ? true : false}>Sign Up</button>
                         </div>                       
                     </form>

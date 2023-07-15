@@ -1,5 +1,4 @@
 import { Chart } from "react-google-charts";
-import { useState } from 'react';
 
 const ResultChart = ({data}) => {
     const options = {

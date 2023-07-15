@@ -91,7 +91,7 @@ const Login = () => {
                     value={pwd}
                     required
                 />
-                <div class="actions">
+                <div className="actions">
                 <button className='primary'>Sign In</button>
                 </div>
 

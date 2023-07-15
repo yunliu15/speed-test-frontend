@@ -142,7 +142,6 @@ const Project = () => {
                                 setModalContent(
                                     <p>{`Are you sure you want to remove ${d.domainName}? All test results in this domain will be deleted.`}</p>
                                 );
-                                console.log('clicked')
                                 setModalCallback(() => {
                                     return () => deleteDomain(d._id, d.domainName);
                                 })

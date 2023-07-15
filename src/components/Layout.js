@@ -8,7 +8,7 @@ const Layout = () => {
     return ( 
         <div className='page-wrapper' >
             <Header />
-            {showModal && <div class="overlay"></div>}
+            {showModal && <div className="overlay"></div>}
             <main className='App'>
                 
                     <Modal />

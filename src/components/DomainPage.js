@@ -41,6 +41,9 @@ const getChartData = (testResults, attribute) => {
                 item.mobileSpeedIndex.value !=='' && mobileData.unshift([theDate, Number(item.mobileSpeedIndex.value.replace("s", ""))])
                 item.desktopSpeedIndex.value !=='' && desktopData.unshift([theDate,  Number(item.desktopSpeedIndex.value.replace("s", ""))]);
                 break;
+            default:
+                item.mobilePerformanceScore && mobileData.unshift([theDate, Number((item.mobilePerformanceScore * 100).toFixed(0))]);
+                item.desktopPerformanceScore && desktopData.unshift([theDate, Number((item.desktopPerformanceScore * 100).toFixed(0))]);
         }
        
     });
