@@ -49,9 +49,8 @@ const Project = () => {
 
     const deleteDomain = async (domainId, domainName) => {
         try {
-            const result = await axiosPrivate.put(
-                `projects/${projectId}/domains/delete`, 
-                JSON.stringify({domainid: domainId })
+            const result = await axiosPrivate.patch(
+                `projects/${projectId}/domains/${domainId}`
                 );
             if(result.data?._id) {
                 setCurrentProject(result.data);
